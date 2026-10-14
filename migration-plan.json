@@ -1,0 +1,90 @@
+{
+  "strategy": "flat",
+  "abort": false,
+  "project_root": "/home/atxuser/.atxct/sources/petclinic-demo/repos/spring-petclinic-9984946f8d460aa0",
+  "build_tool": "both",
+  "dual_build_system": true,
+  "build_command": "JAVA_HOME=/usr/lib/jvm/java-21-amazon-corretto.x86_64 mvn clean verify",
+  "secondary_build_command": "JAVA_HOME=/usr/lib/jvm/java-21-amazon-corretto.x86_64 ./gradlew build",
+  "spring_boot_version_current": "3.5.6",
+  "spring_boot_version_target": "4.1.0",
+  "java_version_current": "17",
+  "java_version_target": "21",
+  "java_upgrade_needed": true,
+  "already_partially_migrated": false,
+  "complexity_tier": "yellow-medium",
+  "extended_timeout": false,
+  "detections": {
+    "jackson_usage": "none",
+    "jackson_custom_serializers": 0,
+    "security_present": false,
+    "security_filter_chain_count": 0,
+    "mockbean_usage": 0,
+    "spybean_usage": 0,
+    "testcontainers_usage": true,
+    "observability": "actuator-only",
+    "reactive": false,
+    "modules": 1,
+    "estimated_loc": 3631,
+    "spring_ai_present": false,
+    "spring_ai_version": "",
+    "mcp_present": false,
+    "spring_batch_present": false,
+    "spring_kafka_present": false,
+    "spring_amqp_present": false,
+    "spring_cloud_present": false,
+    "native_aot_present": true,
+    "jersey_present": false,
+    "spring_retry_present": false,
+    "jspecify_relevant": false,
+    "undertow_present": false,
+    "embedded_server_swap_present": false,
+    "springdoc_or_sba_present": false,
+    "thirdparty_compat_present": false,
+    "spring_grpc_present": false,
+    "jooq_present": false
+  },
+  "tds_required": [
+    "springboot4-core-migration",
+    "springboot4-security-testing",
+    "springboot4-observability",
+    "springboot4-native-aot",
+    "springboot4-verification"
+  ],
+  "tds_skipped": [
+    "springboot4-spring-ai",
+    "springboot4-spring-batch",
+    "springboot4-spring-kafka",
+    "springboot4-spring-amqp",
+    "springboot4-spring-cloud",
+    "springboot4-jersey",
+    "springboot4-spring-retry",
+    "springboot4-jspecify",
+    "springboot4-embedded-servers",
+    "springboot4-springdoc-sba",
+    "springboot4-thirdparty-compat",
+    "springboot4-grpc"
+  ],
+  "blockers": [],
+  "risks": [
+    {
+      "severity": "RISK",
+      "item": "org.testcontainers:junit-jupiter / org.testcontainers:mysql",
+      "issue": "Testcontainers 2.0.x renames artifacts with a testcontainers- prefix; coordinates must be updated in both build files."
+    },
+    {
+      "severity": "RISK",
+      "item": "Docker availability",
+      "issue": "MySqlIntegrationTests / PostgresIntegrationTests rely on Docker; they already self-skip via disabledWithoutDocker / assumeTrue. No new skips may be introduced."
+    }
+  ],
+  "recommendations": {
+    "use_bridges": false,
+    "extended_timeout": false,
+    "manual_review_areas": [
+      "GraalVM nativeCompile is not exercised by the JVM verification gate; run native-image separately if native images are produced in CI.",
+      "Dual build system: every build-file change must land in both pom.xml and build.gradle."
+    ]
+  },
+  "test_baseline_file": ".migration-test-baseline.tsv"
+}
