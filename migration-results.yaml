@@ -1,0 +1,54 @@
+repo: spring-petclinic
+spring_boot_source: "3.5.6"
+spring_boot_target: "4.1.0"
+build_tool: both
+
+results:
+  compilation: PASS
+  test_integrity: PASS
+  test_execution: 56
+  unit_tests:
+    total: 56
+    passed: 54
+    failed: 0
+    skipped: 2
+  deprecated_patterns:
+    jackson2_imports: 0
+    mockbean_annotations: 0
+    security_legacy_dsl: 0
+    old_property_keys: 0
+    old_starter_names: 0
+
+build_logs:
+  maven: "/tmp/mvn-verify-2.log"
+  gradle: "/tmp/gradle-build-1.log"
+
+build_commands:
+  maven: "JAVA_HOME=/usr/lib/jvm/java-21-amazon-corretto.x86_64 mvn clean verify"
+  gradle: "JAVA_HOME=/usr/lib/jvm/java-21-amazon-corretto.x86_64 ./gradlew build"
+
+changes_applied:
+  - "Spring Boot parent/plugin 3.5.6 -> 4.1.0 (pom.xml and build.gradle)"
+  - "java.version / Gradle toolchain 17 -> 21 (JDK 21 present in the build environment)"
+  - "spring-boot-starter-web -> spring-boot-starter-webmvc (both build files)"
+  - "Testcontainers 2 artifact renames: org.testcontainers:junit-jupiter -> testcontainers-junit-jupiter, org.testcontainers:mysql -> testcontainers-mysql (both build files)"
+  - "Added modular test starters: spring-boot-starter-webmvc-test, spring-boot-starter-data-jpa-test, spring-boot-starter-restclient, spring-boot-resttestclient (test scope, both build files)"
+  - "GraalVM native Gradle plugin 0.11.1 -> 1.1.1 (the version managed by spring-boot-dependencies 4.1.0); Maven native-maven-plugin stays BOM-managed"
+  - "Gradle wrapper 8.14.3 -> 8.14.5 (Spring Boot 4 floor)"
+  - "Package relocation (main): org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer -> org.springframework.boot.cache.autoconfigure.JCacheManagerCustomizer"
+  - "Package relocations (test): WebMvcTest -> org.springframework.boot.webmvc.test.autoconfigure; DataJpaTest -> org.springframework.boot.data.jpa.test.autoconfigure; AutoConfigureTestDatabase -> org.springframework.boot.jdbc.test.autoconfigure; RestTemplateBuilder -> org.springframework.boot.restclient; TestRestTemplate -> org.springframework.boot.resttestclient; DataSourceAutoConfiguration / DataSourceTransactionManagerAutoConfiguration -> org.springframework.boot.jdbc.autoconfigure; HibernateJpaAutoConfiguration -> org.springframework.boot.hibernate.autoconfigure"
+  - "Added @AutoConfigureTestRestTemplate to CrashControllerIntegrationTests (required in Boot 4 when autowiring TestRestTemplate)"
+  - "Property rename in @SpringBootTest: server.error.include-message -> spring.web.error.include-message (deprecated in Boot 4; BasicErrorController now reads WebProperties.getError())"
+
+tds_applied:
+  springboot4-core-migration: PASS
+  springboot4-security-testing: PASS
+  springboot4-observability: PASS (no-op - actuator only, no micrometer/otel/tracing coordinates or properties)
+  springboot4-native-aot: PASS (plugin pinned to BOM version; resource hints already glob-compatible; no MemberCategory constants; no jarmode=layertools references)
+  springboot4-verification: PASS
+
+manual_review_needed:
+  - "environment_constraint: MySqlIntegrationTests (2 tests) is skipped because Docker is unavailable in this environment. Gating is PRE-EXISTING (@Testcontainers(disabledWithoutDocker = true)); no new skip was introduced."
+  - "environment_constraint: PostgresIntegrationTests aborts in @BeforeAll via the PRE-EXISTING assumeTrue(DockerClientFactory.instance().isDockerAvailable()) guard, so its 2 @Test methods do not execute without Docker. No new skip was introduced."
+  - "GraalVM nativeCompile / native-image was NOT executed (no GraalVM native toolchain in this environment). The JVM gate (mvn clean verify and ./gradlew build, which includes processAot and processTestAot) is green. Run nativeCompile separately if native images are produced in CI."
+  - "build.gradle wrapper{} block declares distributionType ALL while gradle/wrapper/gradle-wrapper.properties uses the -bin distribution; this mismatch is pre-existing and was left unchanged (only the version was bumped to 8.14.5)."
