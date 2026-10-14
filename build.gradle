@@ -16,7 +16,7 @@ version = '3.5.0'
 
 java {
   toolchain {
-    languageVersion = JavaLanguageVersion.of(17)
+    languageVersion = JavaLanguageVersion.of(25)
   }
 }
 
@@ -86,6 +86,6 @@ formatAot.enabled = false
 formatAotTest.enabled = false
 
 wrapper {
-  gradleVersion = "8.14.3"
+  gradleVersion = "9.1.0"
   distributionType = Wrapper.DistributionType.ALL
 }
