@@ -29,9 +29,9 @@ public class PetClinicRuntimeHints implements RuntimeHintsRegistrar {
 		hints.resources().registerPattern("db/*"); // https://github.com/spring-projects/spring-boot/issues/32654
 		hints.resources().registerPattern("messages/*");
 		hints.resources().registerPattern("mysql-default-conf");
-		hints.serialization().registerType(BaseEntity.class);
-		hints.serialization().registerType(Person.class);
-		hints.serialization().registerType(Vet.class);
+		hints.reflection().registerJavaSerialization(BaseEntity.class);
+		hints.reflection().registerJavaSerialization(Person.class);
+		hints.reflection().registerJavaSerialization(Vet.class);
 	}
 
 }
