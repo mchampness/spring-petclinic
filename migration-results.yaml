@@ -1,20 +1,20 @@
 repo: "spring-petclinic"
-spring_boot_source: "3.5.6"
-spring_boot_target: "4.0.10"
+spring_boot_source: "4.0.10"
+spring_boot_target: "4.2.0"
 build_tool: both
 java_version: "17"
-build_log: "~/.aws/atx/custom/20261123_061824_5f753783/artifacts/mvn-verify.log"
-gradle_build_log: "~/.aws/atx/custom/20261123_061824_5f753783/artifacts/gradle-build.log"
+build_log: "~/.aws/atx/custom/20261123_065141_d0190943/artifacts/mvn-verify.log"
+gradle_build_log: "~/.aws/atx/custom/20261123_065141_d0190943/artifacts/gradle-build.log"
 
 results:
   compilation: PASS
   test_integrity: PASS
-  test_execution: 56
+  test_execution: 58
   unit_tests:
-    total: 56
+    total: 58
     passed: 54
     failed: 0
-    skipped: 2
+    skipped: 4
   gradle_unit_tests:
     total: 58
     passed: 54
@@ -26,8 +26,10 @@ results:
     security_legacy_dsl: 0
     old_property_keys: 0
     old_starter_names: 0
+    rest_template_usages: 0
+    set_disallowed_fields: 0
 
 manual_review_needed:
-  - "environment_constraint: Docker is not available on the build host. MySqlIntegrationTests (2 tests, @Testcontainers(disabledWithoutDocker)) and PostgresIntegrationTests (assumeTrue on Docker, docker-compose) skip themselves through pre-existing guards. They were skipped in the pre-migration baseline too. They stay enabled, so run them on a host with Docker."
+  - "environment_constraint: Docker is not available on the build host. MySqlIntegrationTests (@Testcontainers(disabledWithoutDocker)) and PostgresIntegrationTests (assumeTrue on Docker, docker-compose) skip themselves through pre-existing guards (4 skipped tests). They stay enabled, so run them on a host with Docker."
   - "Native image not built: GraalVM native-image is not installed on the build host. Spring AOT processing (processAot/processTestAot) ran during the Gradle build. Run 'mvn -Pnative native:compile' or './gradlew nativeCompile' with GraalVM 25."
-  - "Target pinned to Spring Boot 4.0.10 (latest 4.0.x) per steering; Java kept at 17. The 4.1-only steps (layertools to tools, 4.1 property removals) were not applied."
+  - "DataBinder.setDisallowedFields(\"id\") was replaced by setAllowedFields allowlists derived from the Thymeleaf form fields (Owner: firstName, lastName, address, city, telephone; Visit: date, description). If new form fields are added, they must be added to the allowlists."

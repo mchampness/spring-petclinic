@@ -3,9 +3,9 @@
   "build_tool": "both",
   "dual_build_system": true,
   "build_command": "JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto.x86_64 mvn clean verify",
-  "source_spring_boot_version": "3.5.6",
-  "target_spring_boot_version": "4.0.10",
-  "target_version_note": "User steering pins Spring Boot 4.0 (latest 4.0.x patch 4.0.10) and Java 17; 4.1-only steps are not applied.",
+  "source_spring_boot_version": "4.0.10",
+  "target_spring_boot_version": "4.2.0",
+  "target_version_note": "Project already on Spring Boot 4.0.10 (migrated from 3.5.6 in a prior run). This run performs a 4.0.10 -> 4.2.0 minor upgrade per steering; Java kept at 17.",
   "java": {
     "current": "17",
     "target": "17",
@@ -21,7 +21,9 @@
     "mockbean_usage": 0,
     "spybean_usage": 0,
     "testcontainers_present": true,
-    "observability": ["spring-boot-starter-actuator"],
+    "observability": [
+      "spring-boot-starter-actuator"
+    ],
     "reactive": false,
     "modules": 1,
     "estimated_loc": 3631,
@@ -71,6 +73,10 @@
   "recommendations": {
     "use_bridges": false,
     "extended_timeout": false,
-    "manual_review_areas": ["Native image build not verifiable (no GraalVM native-image in environment)"]
-  }
+    "manual_review_areas": [
+      "Native image build not verifiable (no GraalVM native-image in environment)"
+    ]
+  },
+  "already_partially_migrated": false,
+  "minor_upgrade": true
 }

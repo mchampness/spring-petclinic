@@ -24,12 +24,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.vet.VetRepository;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class PetClinicIntegrationTests {
@@ -41,7 +39,7 @@ public class PetClinicIntegrationTests {
 	private VetRepository vets;
 
 	@Autowired
-	private RestTemplateBuilder builder;
+	private RestClient.Builder builder;
 
 	@Test
 	void testFindAll() {
@@ -51,8 +49,8 @@ public class PetClinicIntegrationTests {
 
 	@Test
 	void testOwnerDetails() {
-		RestTemplate template = builder.rootUri("http://localhost:" + port).build();
-		ResponseEntity<String> result = template.exchange(RequestEntity.get("/owners/1").build(), String.class);
+		RestClient client = builder.baseUrl("http://localhost:" + port).build();
+		ResponseEntity<String> result = client.get().uri("/owners/1").retrieve().toEntity(String.class);
 		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 
