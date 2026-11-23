@@ -56,7 +56,7 @@ class OwnerController {
 
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields("id");
+		dataBinder.setAllowedFields("firstName", "lastName", "address", "city", "telephone");
 	}
 
 	@ModelAttribute("owner")

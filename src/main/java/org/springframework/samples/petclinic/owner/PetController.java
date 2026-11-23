@@ -84,7 +84,7 @@ class PetController {
 
 	@InitBinder("owner")
 	public void initOwnerBinder(WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields("id");
+		dataBinder.setAllowedFields("firstName", "lastName", "address", "city", "telephone");
 	}
 
 	@InitBinder("pet")
